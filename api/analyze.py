@@ -3,12 +3,17 @@ from PIL import Image
 import google.generativeai as genai
 import json
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# Configure the Gemini API with your key
-GOOGLE_API_KEY = "AIzaSyBnMUfEj2wcEA2jx8ZaAR7o56YkPXQWjOs"
+# Configure the Gemini API with key from environment
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 
 @app.route('/api/analyze', methods=['POST'])
