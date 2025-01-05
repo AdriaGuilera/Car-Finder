@@ -5,6 +5,8 @@ import json
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
+import logging
+import datetime
 
 # Load environment variables
 load_dotenv()
@@ -15,6 +17,17 @@ CORS(app)
 # Configure the Gemini API with key from environment
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
+
+def setup_logging():
+    logs_dir = Path(__file__).parent / 'logs'
+    logs_dir.mkdir(exist_ok=True)
+    
+    log_file = logs_dir / f'gemini_responses_{datetime.now().strftime("%Y%m%d")}.log'
+    logging.basicConfig(
+        filename=str(log_file),
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze_car():
@@ -62,7 +75,7 @@ def analyze_car():
         },
         "HP": [60, 130],
         "Speed": {
-            "max": [160-200],
+            "max": [160, 200],
             "unit": "km/h"
         },
         "Chances": {
@@ -79,4 +92,4 @@ def analyze_car():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)

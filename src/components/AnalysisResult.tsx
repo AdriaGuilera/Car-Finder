@@ -41,7 +41,7 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
             Horsepower: {analysis["HP"][0]} - {analysis["HP"][1]} HP
           </p>
           <p className="text-sm text-gray-600">
-            Top Speed: {analysis["Speed"].max[0]} {analysis["Speed"].unit}
+            Top Speed: {analysis["Speed"].max[0]} - {analysis["Speed"].max[1]} {analysis["Speed"].unit}
           </p>
         </div>
 

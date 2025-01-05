@@ -9,7 +9,7 @@ export interface CarAnalysis {
   };
   "HP": [number, number];
   "Speed": {
-    max: [number];
+    max: [number, number];
     unit: string;
   };
   "Chances": {
