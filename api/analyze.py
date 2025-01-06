@@ -32,9 +32,12 @@ def setup_logging():
 @app.route('/api/analyze', methods=['POST'])
 def analyze_car():
     if 'image' not in request.files:
-        return jsonify({'error': 'No image provided'}), 400
+        return jsonify({'error': 'No image provided', 'errorType': 'NO_IMAGE'}), 400
         
     file = request.files['image']
+    
+    if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+        return jsonify({'error': 'Invalid image format', 'errorType': 'INVALID_FORMAT'}), 400
     
     try:
         image = Image.open(file)
@@ -61,6 +64,7 @@ def analyze_car():
         Provide just the information that is asked, nothing else or any additional information. 
         Not bold Titles as short as possible for each category, max 2 words
         Dont put any introductory text.
+        Always provide all the information requested, if you dont have the information for a category, make an educated guess, never leave a category blank.
         Just provide information if the image provides a car or a motorcycle. Dont provide any information about anything other than that, jsut print error.
         Provide the OUTPUT in JSON with the following format, 
         plain text without the ```json at the begining and the end to send it to another script it has to be in a perfect Json format. 
@@ -85,11 +89,18 @@ def analyze_car():
         """
 
         response = model.generate_content([prompt, image])
-        result = json.loads(response.text)
         
+        # Check if response contains error indicating not a car
+        if "error" in response.text.lower():
+            return jsonify({'error': 'The image does not appear to be a car', 'errorType': 'NOT_CAR'}), 400
+            
+        result = json.loads(response.text)
         return jsonify(result)
+        
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid response format', 'errorType': 'INVALID_RESPONSE'}), 500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e), 'errorType': 'ANALYSIS_FAILED'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)

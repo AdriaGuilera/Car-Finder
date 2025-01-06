@@ -15,10 +15,10 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
             <Car className="w-5 h-5 text-blue-600" />
             <h3 className="font-semibold text-gray-700">Car Details</h3>
           </div>
-          <p className="text-sm text-gray-600">Make: {analysis["Car Make"]}</p>
-          <p className="text-sm text-gray-600">Model: {analysis["Model"]}</p>
+          <p className="text-sm text-gray-600">Make: {analysis["Car Make"] || 'N/A'}</p>
+          <p className="text-sm text-gray-600">Model: {analysis["Model"] || 'N/A'}</p>
           <p className="text-sm text-gray-600">
-            Year: {analysis["Year"][0]} - {analysis["Year"][1]}
+            Year: {analysis["Year"]?.[0] || 'N/A'} - {analysis["Year"]?.[1] || 'N/A'}
           </p>
         </div>
 
@@ -28,7 +28,7 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
             <h3 className="font-semibold text-gray-700">Price Range</h3>
           </div>
           <p className="text-sm text-gray-600">
-            {analysis["Price"].min.toLocaleString()} - {analysis["Price"].max.toLocaleString()} {analysis["Price"].unit}
+            {analysis["Price"]?.min?.toLocaleString() || 'N/A'} - {analysis["Price"]?.max?.toLocaleString() || 'N/A'} {analysis["Price"]?.unit || 'USD'}
           </p>
         </div>
 
@@ -38,10 +38,10 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
             <h3 className="font-semibold text-gray-700">Performance</h3>
           </div>
           <p className="text-sm text-gray-600">
-            Horsepower: {analysis["HP"][0]} - {analysis["HP"][1]} HP
+            Horsepower: {analysis["HP"]?.[0] || 'N/A'} - {analysis["HP"]?.[1] || 'N/A'} HP
           </p>
           <p className="text-sm text-gray-600">
-            Top Speed: {analysis["Speed"].max[0]} - {analysis["Speed"].max[1]} {analysis["Speed"].unit}
+            Top Speed: {analysis["Speed"]?.max?.[0] || 'N/A'} - {analysis["Speed"]?.max?.[1] || 'N/A'} {analysis["Speed"]?.unit || 'km/h'}
           </p>
         </div>
 
@@ -52,10 +52,10 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              Level: <span className="font-semibold">{analysis["Chances"].Rarity}</span>
+              Level: <span className="font-semibold">{analysis["Chances"]?.Rarity || 'N/A'}</span>
             </p>
             <p className="text-sm text-gray-600">
-              Chance: <span className="font-semibold">{analysis["Chances"].Chance}</span>
+              Chance: <span className="font-semibold">{analysis["Chances"]?.Chance || 'N/A'}</span>
             </p>
           </div>
         </div>
